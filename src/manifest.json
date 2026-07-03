@@ -1,0 +1,68 @@
+{
+  "id": "ticket",
+  "name": "Ticketing",
+  "version": "0.1.0",
+  "hooks": ["publish", "unpublish", "delete"],
+  "nav": [
+    { "label": "Tickets", "href": "tickets", "roles": ["admin", "editor", "moderator"] }
+  ],
+  "permissions": [
+    { "value": "ticket:view", "label": "Tickets: view ticket types, promo codes and orders" },
+    { "value": "ticket:write", "label": "Tickets: edit ticket types, promo codes, settings and manage orders" }
+  ],
+  "contentTypes": {
+    "readTypes": ["event", "guest", "mail_list"],
+    "writeTypes": ["guest"],
+    "blueprint": {
+      "ticket_type": [
+        "*event",
+        "name:text/title",
+        "description:textarea",
+        "@price",
+        "@currency",
+        "@quantity",
+        "@sold",
+        "@active:switch"
+      ],
+      "ticket_order": [
+        "*event",
+        "*guest",
+        "*mail_list",
+        "*ticket_type",
+        "@order_code",
+        "@status",
+        "@payment_method",
+        "@quantity",
+        "@unit_amount",
+        "@discount_amount",
+        "@total_amount",
+        "@currency",
+        "@promo_code",
+        "@stripe_session_id",
+        "@stripe_payment_intent",
+        "@email",
+        "name",
+        {
+          "history": ["@status", "@date", "@message"]
+        }
+      ],
+      "ticket_promo": [
+        "*event",
+        "name:text/title",
+        "@code",
+        "@kind",
+        "@amount",
+        "@max_uses",
+        "@used_count"
+      ],
+      "ticket_settings": [
+        "*event",
+        "name",
+        "@stripe_enabled:switch",
+        "@offline_enabled:switch",
+        "@reply_to",
+        "offline_instructions:textarea"
+      ]
+    }
+  }
+}

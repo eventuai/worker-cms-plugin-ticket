@@ -1,0 +1,4 @@
+{
+  "sections": { "main": { "type": "ticket-type-form" } },
+  "order": ["main"]
+}

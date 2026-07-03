@@ -1,0 +1,24 @@
+<div class="flex items-center justify-between gap-4 mb-4">
+  <div><a class="inline-block text-xs text-gray-500 mb-1 hover:text-indigo-700" href="{{ backHref | escape }}">← {{ eventName | escape }}</a><h1 class="text-2xl font-bold text-gray-900">Purchase links</h1>
+  <p class="mt-1 text-sm text-gray-500">Writes a signed <code class="bg-gray-100 px-1 py-0.5 rounded text-xs font-mono">ticket_url</code> onto every guest in a list. Use <code class="bg-gray-100 px-1 py-0.5 rounded text-xs font-mono">{&#123;ticket_url&#125;}</code> in an EDM to send them out.</p></div>
+</div>
+{% if flash != blank %}<p class="mb-4 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700">{{ flash | escape }}</p>{% endif %}
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6" style="max-width:36rem">
+  {% if configured %}
+    {% if canEdit %}
+    <form method="post" action="{{ action | escape }}">
+      <label class="block mb-3"><span class="block text-sm text-gray-700 mb-1">Guest list</span>
+        <select class="block w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" name="list_id" required>
+          <option value="">Select a guest list</option>
+          {% for list in lists %}<option value="{{ list.id }}">{{ list.name | escape }}</option>{% endfor %}
+        </select>
+      </label>
+      <button class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-transparent bg-indigo-600 px-4 text-sm font-semibold text-white hover:bg-indigo-700 cursor-pointer" type="submit">Generate links</button>
+    </form>
+    {% else %}
+    <p class="text-sm text-gray-500">You do not have permission to generate links.</p>
+    {% endif %}
+  {% else %}
+    <p class="text-sm text-gray-500">Set <code class="bg-gray-100 px-1 py-0.5 rounded text-xs font-mono">PUBLIC_BASE_URL</code> (the worker-rsvp origin) and <code class="bg-gray-100 px-1 py-0.5 rounded text-xs font-mono">PLUGIN_SECRET</code> on this plugin Worker first.</p>
+  {% endif %}
+</div>

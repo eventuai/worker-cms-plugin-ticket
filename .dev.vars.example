@@ -1,0 +1,12 @@
+# Local development variables for the ticket plugin Worker (copy to .dev.vars).
+# PLUGIN_SECRET must match the shared secret configured for this plugin in the
+# CMS admin (Plugins → Manage → ticket → Shared secret).
+
+CMS_URL=http://localhost:8787
+PLUGIN_SECRET=change-me
+PUBLIC_BASE_URL=http://localhost:8790
+
+# Stripe test-mode keys (https://dashboard.stripe.com/test/apikeys). The webhook
+# secret comes from `stripe listen --forward-to localhost:8789/webhook/stripe`.
+STRIPE_SECRET_KEY=sk_test_xxx
+STRIPE_WEBHOOK_SECRET=whsec_xxx

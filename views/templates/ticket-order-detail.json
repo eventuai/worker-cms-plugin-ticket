@@ -1,0 +1,4 @@
+{
+  "sections": { "main": { "type": "ticket-order-detail" } },
+  "order": ["main"]
+}

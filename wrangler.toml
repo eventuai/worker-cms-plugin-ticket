@@ -1,0 +1,38 @@
+name = "worker-cms-plugin-ticket"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# Admin view templates (LiquidJS + JSON templates, mirroring the CMS). The Worker
+# runs first for every request and reads these internally via the VIEWS binding,
+# so the files are never served publicly.
+[assets]
+directory = "./views"
+binding = "VIEWS"
+run_worker_first = true
+
+[version_metadata]
+binding = "CF_VERSION_METADATA"
+
+# Secrets — set via `wrangler secret put <NAME>`:
+#   PLUGIN_SECRET          shared with the CMS (Plugins → this plugin → Shared secret);
+#                          also verifies signed purchase links minted for worker-rsvp.
+#   STRIPE_SECRET_KEY      Stripe API secret key (sk_live_... / sk_test_...).
+#   STRIPE_WEBHOOK_SECRET  Stripe webhook endpoint signing secret (whsec_...), from
+#                          the Stripe dashboard endpoint pointing at {this worker}/webhook/stripe.
+
+[vars]
+# Base URL of the CMS Worker — where this plugin reaches the F1 page read/write
+# API ({CMS_URL}/__cms/*) to read events/guests and manage ticket pages.
+CMS_URL = "https://cms.eventuai.com"
+# Public origin of the worker-rsvp site — signed purchase links written onto
+# guests point there (it verifies them with a copy of this plugin's PLUGIN_SECRET).
+# PUBLIC_BASE_URL = "https://rsvp.eventuai.com"
+
+# ── Confirmation email (uncomment + provision before enabling delivery) ────────
+# Cloudflare Email Service binding. EMAIL_FROM must be a verified sender address.
+# [[send_email]]
+# name = "EMAIL"
+
+# [vars]
+# EMAIL_FROM = "tickets@example.com"

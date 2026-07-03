@@ -1,0 +1,12 @@
+<div class="flex items-center justify-between gap-4 mb-4">
+  <div><a class="inline-block text-xs text-gray-500 mb-1 hover:text-indigo-700" href="{{ backHref | escape }}">← {{ eventName | escape }}</a><h1 class="text-2xl font-bold text-gray-900">Ticket settings</h1></div>
+</div>
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6" style="max-width:36rem">
+  <form method="post" action="{{ action | escape }}">
+    <label class="block mb-3"><input type="checkbox" name="stripe_enabled" value="true"{% if values.stripe_enabled == 'true' %} checked{% endif %}> <span class="text-sm text-gray-700">Accept card payment (Stripe Checkout)</span></label>
+    <label class="block mb-3"><input type="checkbox" name="offline_enabled" value="true"{% if values.offline_enabled == 'true' %} checked{% endif %}> <span class="text-sm text-gray-700">Accept offline payment (bank transfer / cash)</span></label>
+    <label class="block mb-3"><span class="block text-sm text-gray-700 mb-1">Offline payment instructions (shown to the buyer after ordering)</span><textarea class="block w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" name="offline_instructions" rows="5" placeholder="Bank transfer to ...; quote your order code as the reference.">{{ values.offline_instructions | escape }}</textarea></label>
+    <label class="block mb-3"><span class="block text-sm text-gray-700 mb-1">Reply-to address for confirmation emails</span><input class="block w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" type="email" name="reply_to" placeholder="tickets@example.com" value="{{ values.reply_to | escape }}"></label>
+    <button class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-transparent bg-indigo-600 px-4 text-sm font-semibold text-white hover:bg-indigo-700 cursor-pointer" type="submit">Save settings</button>
+  </form>
+</div>
