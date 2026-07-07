@@ -35,7 +35,7 @@ this Worker ──/__cms──▶ CMS host D1 (ticket pages, guest updates)
 
 ## Caveats
 
-- Inventory is a read-modify-write `sold` counter through the F1 API (no
+- Inventory is a read-modify-write `sold` counter through the Plugin API (no
   transactions): simultaneous checkouts can oversell by a request's worth.
 - One order = one ticket type × quantity; buying two types means two orders.
 - Stripe webhook events handled: `checkout.session.completed`,

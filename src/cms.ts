@@ -1,7 +1,7 @@
 // ============================================================
 // Ticket plugin CMS bridge.
 //
-// Shared F1 client/types and neutral lect readers live in
+// Shared Plugin API client/types and neutral lect readers live in
 // @lionrockjs/worker-cms-plugin. This file adds only the ticket-specific
 // helpers: money formatting, order history filtering, and per-event lookups.
 // ============================================================

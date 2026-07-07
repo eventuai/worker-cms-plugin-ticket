@@ -22,8 +22,8 @@ binding = "CF_VERSION_METADATA"
 #                          the Stripe dashboard endpoint pointing at {this worker}/webhook/stripe.
 
 [vars]
-# Base URL of the CMS Worker — where this plugin reaches the F1 page read/write
-# API ({CMS_URL}/__cms/*) to read events/guests and manage ticket pages.
+# Base URL of the CMS Worker — where this plugin reaches the Plugin API
+# ({CMS_URL}/__cms/*, page read/write) to read events/guests and manage ticket pages.
 CMS_URL = "https://cms.eventuai.com"
 # Public origin of the worker-rsvp site — signed purchase links written onto
 # guests point there (it verifies them with a copy of this plugin's PLUGIN_SECRET).

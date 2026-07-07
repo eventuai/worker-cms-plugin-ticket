@@ -179,7 +179,7 @@ export async function resolvePromo(
 }
 
 // ── Inventory & counters ────────────────────────────────────────────────────
-// Read-modify-write on a lect attr; the F1 API has no transactions, so two
+// Read-modify-write on a lect attr; the Plugin API has no transactions, so two
 // simultaneous checkouts can oversell by one request's worth — accepted for v1.
 
 async function bumpCounter(cms: CmsClient, page: CmsPage, key: string, delta: number): Promise<void> {
