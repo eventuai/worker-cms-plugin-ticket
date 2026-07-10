@@ -46,11 +46,28 @@ export interface OutboundEmail {
 export interface TicketEnv extends StripeEnv {
   PLUGIN_SECRET?: string;
   CMS_URL?: string;
+  /** Multi-tenant registry: `tenant:<cms origin>` → TenantConfig JSON. When
+   *  unbound, CMS_URL + PLUGIN_SECRET form the single legacy tenant. */
+  TENANTS?: KVNamespace;
+  /** Tenant public-token signing key (tenantClientEnv overlay); falls back to PLUGIN_SECRET. */
+  SIGN_KEY?: string;
+  CMS_TENANT_ID?: string;
+  CMS_TENANT_REF?: string;
   /** Public origin of worker-rsvp — purchase links and order pages live there. */
   PUBLIC_BASE_URL?: string;
   VIEWS: Fetcher;
   EMAIL?: { send(message: OutboundEmail): Promise<unknown> };
   EMAIL_FROM?: string;
+}
+
+/** Key for the public HMAC tokens (purchase/order links, relayed to /api/*). */
+export function ticketSignKey(env: TicketEnv): string {
+  return env.SIGN_KEY || env.PLUGIN_SECRET || '';
+}
+
+/** `?t=<ref>` suffix routing shared public endpoints to the minting tenant. */
+function tenantSuffix(env: TicketEnv): string {
+  return env.CMS_TENANT_REF ? `?t=${env.CMS_TENANT_REF}` : '';
 }
 
 /** Stripe Checkout sessions lapse after 30 minutes (Stripe's minimum). */
@@ -70,14 +87,14 @@ export function orderPayload(orderCode: string): string {
 
 export async function purchaseUrl(env: TicketEnv, eventId: number, listId: number, guestId: number): Promise<string> {
   const base = (env.PUBLIC_BASE_URL ?? '').replace(/\/+$/, '');
-  const signature = await signPayload(env.PLUGIN_SECRET ?? '', purchasePayload(eventId, listId, guestId));
-  return `${base}/ticket/buy/${eventId}/${listId}/${guestId}/${signature}`;
+  const signature = await signPayload(ticketSignKey(env), purchasePayload(eventId, listId, guestId));
+  return `${base}/ticket/buy/${eventId}/${listId}/${guestId}/${signature}${tenantSuffix(env)}`;
 }
 
 export async function orderUrl(env: TicketEnv, orderCode: string): Promise<string> {
   const base = (env.PUBLIC_BASE_URL ?? '').replace(/\/+$/, '');
-  const signature = await signPayload(env.PLUGIN_SECRET ?? '', orderPayload(orderCode));
-  return `${base}/ticket/order/${orderCode}/${signature}`;
+  const signature = await signPayload(ticketSignKey(env), orderPayload(orderCode));
+  return `${base}/ticket/order/${orderCode}/${signature}${tenantSuffix(env)}`;
 }
 
 /** Public, unguessable order code; doubles as the page name and the check-in QR value. */
@@ -615,7 +632,7 @@ export async function handleLinksAdmin(
 
   if (request.method === 'POST') {
     if (!access.canEdit) return forbidden();
-    if (!env.PUBLIC_BASE_URL || !env.PLUGIN_SECRET) {
+    if (!env.PUBLIC_BASE_URL || !ticketSignKey(env)) {
       return redirect(`${base}/links?flash=${encodeURIComponent('Set PUBLIC_BASE_URL and PLUGIN_SECRET before minting links.')}`);
     }
     const form = await request.formData();
@@ -641,7 +658,7 @@ export async function handleLinksAdmin(
     backHref: base,
     canEdit: access.canEdit,
     action: `${base}/links`,
-    configured: Boolean(env.PUBLIC_BASE_URL && env.PLUGIN_SECRET),
+    configured: Boolean(env.PUBLIC_BASE_URL && ticketSignKey(env)),
     lists: lists.map((list) => ({ id: list.id, name: list.name })),
   }, jsonOnly);
 }

@@ -21,6 +21,18 @@ binding = "CF_VERSION_METADATA"
 #   STRIPE_WEBHOOK_SECRET  Stripe webhook endpoint signing secret (whsec_...), from
 #                          the Stripe dashboard endpoint pointing at {this worker}/webhook/stripe.
 
+# ── Multi-tenant mode (several CMS hosts → this one plugin) ────────────────────
+# One record per connected CMS. `signKey` signs the public purchase/order
+# tokens (minted links carry `?t=<tenant ref>`; share signKey with that
+# tenant's worker-rsvp). Per-tenant Stripe accounts go in vars, and each
+# tenant's Stripe webhook endpoint must point at
+# {this worker}/webhook/stripe?t=<tenant ref>:
+#   wrangler kv key put --binding TENANTS "tenant:https://cms1.example.com" \
+#     '{"secret":"<32-byte hex>","signKey":"<32-byte hex>","publicBaseUrl":"https://rsvp1.example.com","vars":{"STRIPE_SECRET_KEY":"sk_...","STRIPE_WEBHOOK_SECRET":"whsec_..."}}'
+# [[kv_namespaces]]
+# binding = "TENANTS"
+# id = "<kv-id>"
+
 [vars]
 # Base URL of the CMS Worker — where this plugin reaches the Plugin API
 # ({CMS_URL}/__cms/*, page read/write) to read events/guests and manage ticket pages.

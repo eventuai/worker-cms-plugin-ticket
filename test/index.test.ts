@@ -660,8 +660,10 @@ describe('purchase links', () => {
 
     const guest = cms.pages.get(chain.guest.id)!;
     const expected = await purchaseSig(chain.event.id, chain.list.id, chain.guest.id);
-    expect(guest.lect.ticket_url).toBe(
-      `https://rsvp.test/ticket/buy/${chain.event.id}/${chain.list.id}/${chain.guest.id}/${expected}`,
-    );
+    // Minted links carry the tenant ref so the shared /api endpoints can route
+    // signature verification once more tenants exist.
+    expect(guest.lect.ticket_url).toMatch(new RegExp(
+      `^https://rsvp\\.test/ticket/buy/${chain.event.id}/${chain.list.id}/${chain.guest.id}/${expected}\\?t=[0-9a-f]{16}$`,
+    ));
   });
 });

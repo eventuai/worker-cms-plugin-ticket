@@ -14,22 +14,26 @@ import { handleLinksAdmin, handleOrdersAdmin, type TicketEnv } from './orders';
 import { forbidden, ticketAdminAccessForRequest } from './permissions';
 import { handleTicketsAdmin, pageId } from './tickets';
 import { adminView } from './templates/views';
-import { requirePluginSecret, serveViewAsset } from '@lionrockjs/worker-cms-plugin';
+import { requireTenant, serveViewAsset, soleTenant, tenantByRef, tenantClientEnv } from '@lionrockjs/worker-cms-plugin';
 // The plugin manifest (content types, nav, permissions) is plain data, served
 // verbatim at /__plugin/manifest.
 import MANIFEST from './manifest.json';
 
 export default {
-  async fetch(request: Request, env: TicketEnv): Promise<Response> {
+  async fetch(request: Request, baseEnv: TicketEnv): Promise<Response> {
     const url = new URL(request.url);
     const path = url.pathname;
 
+    // Secret-authenticated host calls resolve their tenant; handlers then run
+    // against a tenant-scoped env, binding every CmsClient to the calling CMS.
+    let env = baseEnv;
     const secretRequired = path.startsWith('/__plugin/hooks/')
       || path.startsWith('/__plugin/publish/')
       || path.startsWith('/__plugin/admin');
     if (secretRequired) {
-      const denied = requirePluginSecret(request, env.PLUGIN_SECRET);
-      if (denied) return denied;
+      const tenant = await requireTenant(request, baseEnv);
+      if (tenant instanceof Response) return tenant;
+      env = tenantClientEnv(baseEnv, tenant);
     }
 
     if (path === '/__plugin/manifest') {
@@ -56,8 +60,19 @@ export default {
     // ── Public routes (this Worker's own domain) ──────────────────────────
     // worker-rsvp calls /api/* relaying the HMAC signatures from its URLs;
     // Stripe calls /webhook/stripe directly.
+    //
+    // Multi-tenant: `?t=<ref>` (carried by minted purchase/order links and by
+    // the per-tenant Stripe webhook registration) picks the tenant whose keys
+    // verify the tokens and whose CMS receives the writes. A swapped ref just
+    // fails signature/webhook verification under the other tenant's keys.
+    // Legacy URLs without a ref resolve while exactly one tenant is configured.
 
     if (path.startsWith('/api/') || path === '/webhook/stripe') {
+      const ref = url.searchParams.get('t') ?? '';
+      const tenant = ref ? await tenantByRef(baseEnv, ref) : await soleTenant(baseEnv);
+      if (!tenant) return new Response('not found', { status: 404 });
+      env = tenantClientEnv(baseEnv, tenant);
+
       let cms: CmsClient;
       try {
         cms = new CmsClient(env);

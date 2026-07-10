@@ -33,6 +33,7 @@ import {
   orderPayload,
   purchasePayload,
   saleableType,
+  ticketSignKey,
   verifiedGuest,
   type TicketEnv,
 } from './orders';
@@ -48,8 +49,9 @@ function json(data: unknown, status = 200): Response {
 export async function handleCheckoutContext(cms: CmsClient, env: TicketEnv, segments: string[]): Promise<Response> {
   const [eventId, listId, guestId] = segments.slice(0, 3).map((value) => pageId(value));
   const signature = segments[3] ?? '';
-  if (!eventId || !listId || !guestId || !signature || !env.PLUGIN_SECRET) return json({ error: 'not found' }, 404);
-  if (!(await verifyPayload(env.PLUGIN_SECRET, purchasePayload(eventId, listId, guestId), signature))) {
+  const signKey = ticketSignKey(env);
+  if (!eventId || !listId || !guestId || !signature || !signKey) return json({ error: 'not found' }, 404);
+  if (!(await verifyPayload(signKey, purchasePayload(eventId, listId, guestId), signature))) {
     return json({ error: 'not found' }, 404);
   }
 
@@ -95,7 +97,7 @@ interface OrderRequestBody {
 
 export async function handleCreateOrder(request: Request, cms: CmsClient, env: TicketEnv): Promise<Response> {
   const body = await request.json().catch(() => null) as OrderRequestBody | null;
-  if (!body || !env.PLUGIN_SECRET) return json({ error: 'bad request' }, 400);
+  if (!body || !ticketSignKey(env)) return json({ error: 'bad request' }, 400);
 
   const eventId = pageId(body.event_id);
   const listId = pageId(body.list_id);
@@ -103,7 +105,7 @@ export async function handleCreateOrder(request: Request, cms: CmsClient, env: T
   const ticketTypeId = pageId(body.ticket_type_id);
   const signature = typeof body.sig === 'string' ? body.sig : '';
   if (!eventId || !listId || !guestId || !ticketTypeId || !signature) return json({ error: 'bad request' }, 400);
-  if (!(await verifyPayload(env.PLUGIN_SECRET, purchasePayload(eventId, listId, guestId), signature))) {
+  if (!(await verifyPayload(ticketSignKey(env), purchasePayload(eventId, listId, guestId), signature))) {
     return json({ error: 'not found' }, 404);
   }
 
@@ -130,8 +132,9 @@ export async function handleCreateOrder(request: Request, cms: CmsClient, env: T
 export async function handleOrderStatus(cms: CmsClient, env: TicketEnv, segments: string[]): Promise<Response> {
   const code = (segments[0] ?? '').trim().toUpperCase();
   const signature = segments[1] ?? '';
-  if (!code || !signature || !env.PLUGIN_SECRET) return json({ error: 'not found' }, 404);
-  if (!(await verifyPayload(env.PLUGIN_SECRET, orderPayload(code), signature))) return json({ error: 'not found' }, 404);
+  const signKey = ticketSignKey(env);
+  if (!code || !signature || !signKey) return json({ error: 'not found' }, 404);
+  if (!(await verifyPayload(signKey, orderPayload(code), signature))) return json({ error: 'not found' }, 404);
 
   const order = await orderByCode(cms, code);
   if (!order) return json({ error: 'not found' }, 404);
