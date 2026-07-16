@@ -1,46 +1,46 @@
 <div class="flex items-center justify-between gap-4 mb-4">
-  <div><a class="inline-block text-xs text-gray-500 mb-1 hover:text-indigo-700" href="{{ backHref | escape }}">← Orders</a>
-  <h1 class="text-2xl font-bold text-gray-900">Order <span class="font-mono">{{ code | escape }}</span></h1>
-  <p class="mt-1 text-sm"><span class="inline-block px-2 py-0.5 rounded-full text-xs font-semibold {{ statusClass }}">{{ status | replace: '_', ' ' | escape }}</span></p></div>
+  <div><a class="inline-block text-xs text-gray-500 mb-1 hover:text-indigo-700" href="{{ backHref }}">← Orders</a>
+  <h1 class="text-2xl font-bold text-gray-900">Order <span class="font-mono">{{ code }}</span></h1>
+  <p class="mt-1 text-sm"><span class="inline-block px-2 py-0.5 rounded-full text-xs font-semibold {{ statusClass }}">{{ status | replace: '_', ' ' }}</span></p></div>
   {% if canEdit %}
   <div class="inline-flex items-center gap-2">
     {% if canMarkPaid %}
-    <form method="post" action="{{ paidAction | escape }}" onsubmit="return confirm('Mark this order as paid? A confirmation email with the e-ticket will be sent.')">
+    <form method="post" action="{{ paidAction }}" onsubmit="return confirm('Mark this order as paid? A confirmation email with the e-ticket will be sent.')">
       <button class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-transparent bg-indigo-600 px-4 text-sm font-semibold text-white hover:bg-indigo-700 cursor-pointer" type="submit">Mark as paid</button>
     </form>
     {% endif %}
     {% if canCancel %}
-    <form method="post" action="{{ cancelAction | escape }}" onsubmit="return confirm('Cancel this order and release its tickets?')">
+    <form method="post" action="{{ cancelAction }}" onsubmit="return confirm('Cancel this order and release its tickets?')">
       <button class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 hover:bg-gray-100 cursor-pointer" type="submit">Cancel order</button>
     </form>
     {% endif %}
     {% if canRefund %}
-    <form method="post" action="{{ refundAction | escape }}" onsubmit="return confirm('Refund this order? Stripe orders are refunded via the Stripe API.')">
+    <form method="post" action="{{ refundAction }}" onsubmit="return confirm('Refund this order? Stripe orders are refunded via the Stripe API.')">
       <button class="inline-flex h-10 items-center justify-center gap-2 rounded-lg text-sm font-semibold text-red-600 hover:bg-red-50 hover:text-red-700 px-4 cursor-pointer" type="submit">Refund</button>
     </form>
     {% endif %}
     {% if status == 'paid' %}
-    <form method="post" action="{{ resendAction | escape }}">
+    <form method="post" action="{{ resendAction }}">
       <button class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 hover:bg-gray-100 cursor-pointer" type="submit">Resend email</button>
     </form>
     {% endif %}
   </div>
   {% endif %}
 </div>
-{% if flash != blank %}<p class="mb-4 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700">{{ flash | escape }}</p>{% endif %}
+{% if flash != blank %}<p class="mb-4 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700">{{ flash }}</p>{% endif %}
 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-4" style="max-width:36rem">
   <table class="w-full text-left">
     <tbody class="divide-y divide-gray-100">
-      <tr><td class="py-2 text-sm text-gray-500">Ticket type</td><td class="py-2 text-sm text-gray-700">{{ typeName | escape }} × {{ quantity | escape }}</td></tr>
-      <tr><td class="py-2 text-sm text-gray-500">Guest</td><td class="py-2 text-sm text-gray-700">{% if guestHref != blank %}<a class="text-indigo-600 hover:text-indigo-800" href="{{ guestHref | escape }}">{{ guestName | escape }}</a>{% else %}{{ guestName | escape }}{% endif %}</td></tr>
-      <tr><td class="py-2 text-sm text-gray-500">Email</td><td class="py-2 text-sm text-gray-700">{{ email | escape }}</td></tr>
-      <tr><td class="py-2 text-sm text-gray-500">Unit price</td><td class="py-2 text-sm text-gray-700">{{ unit | escape }}</td></tr>
-      {% if promo != blank %}<tr><td class="py-2 text-sm text-gray-500">Promo</td><td class="py-2 text-sm text-gray-700"><code class="bg-gray-100 px-1 py-0.5 rounded text-xs font-mono">{{ promo | escape }}</code> (−{{ discount | escape }})</td></tr>{% endif %}
-      <tr><td class="py-2 text-sm text-gray-500">Total</td><td class="py-2 text-sm font-semibold text-gray-900">{{ total | escape }}</td></tr>
-      <tr><td class="py-2 text-sm text-gray-500">Payment</td><td class="py-2 text-sm text-gray-700">{{ method | escape }}</td></tr>
-      {% if stripeSession != blank %}<tr><td class="py-2 text-sm text-gray-500">Stripe session</td><td class="py-2 text-sm text-gray-500 font-mono break-all">{{ stripeSession | escape }}</td></tr>{% endif %}
-      {% if stripePaymentIntent != blank %}<tr><td class="py-2 text-sm text-gray-500">Payment intent</td><td class="py-2 text-sm text-gray-500 font-mono break-all">{{ stripePaymentIntent | escape }}</td></tr>{% endif %}
-      {% if publicUrl != blank %}<tr><td class="py-2 text-sm text-gray-500">E-ticket page</td><td class="py-2 text-sm"><a class="text-indigo-600 hover:text-indigo-800 break-all" href="{{ publicUrl | escape }}" target="_blank" rel="noopener">{{ publicUrl | escape }}</a></td></tr>{% endif %}
+      <tr><td class="py-2 text-sm text-gray-500">Ticket type</td><td class="py-2 text-sm text-gray-700">{{ typeName }} × {{ quantity }}</td></tr>
+      <tr><td class="py-2 text-sm text-gray-500">Guest</td><td class="py-2 text-sm text-gray-700">{% if guestHref != blank %}<a class="text-indigo-600 hover:text-indigo-800" href="{{ guestHref }}">{{ guestName }}</a>{% else %}{{ guestName }}{% endif %}</td></tr>
+      <tr><td class="py-2 text-sm text-gray-500">Email</td><td class="py-2 text-sm text-gray-700">{{ email }}</td></tr>
+      <tr><td class="py-2 text-sm text-gray-500">Unit price</td><td class="py-2 text-sm text-gray-700">{{ unit }}</td></tr>
+      {% if promo != blank %}<tr><td class="py-2 text-sm text-gray-500">Promo</td><td class="py-2 text-sm text-gray-700"><code class="bg-gray-100 px-1 py-0.5 rounded text-xs font-mono">{{ promo }}</code> (−{{ discount }})</td></tr>{% endif %}
+      <tr><td class="py-2 text-sm text-gray-500">Total</td><td class="py-2 text-sm font-semibold text-gray-900">{{ total }}</td></tr>
+      <tr><td class="py-2 text-sm text-gray-500">Payment</td><td class="py-2 text-sm text-gray-700">{{ method }}</td></tr>
+      {% if stripeSession != blank %}<tr><td class="py-2 text-sm text-gray-500">Stripe session</td><td class="py-2 text-sm text-gray-500 font-mono break-all">{{ stripeSession }}</td></tr>{% endif %}
+      {% if stripePaymentIntent != blank %}<tr><td class="py-2 text-sm text-gray-500">Payment intent</td><td class="py-2 text-sm text-gray-500 font-mono break-all">{{ stripePaymentIntent }}</td></tr>{% endif %}
+      {% if publicUrl != blank %}<tr><td class="py-2 text-sm text-gray-500">E-ticket page</td><td class="py-2 text-sm"><a class="text-indigo-600 hover:text-indigo-800 break-all" href="{{ publicUrl }}" target="_blank" rel="noopener">{{ publicUrl }}</a></td></tr>{% endif %}
     </tbody>
   </table>
 </div>
@@ -50,9 +50,9 @@
     <tbody class="divide-y divide-gray-100">
       {% for entry in history %}
         <tr>
-          <td class="px-6 py-3 text-sm text-gray-500 whitespace-nowrap">{{ entry.date | escape }}</td>
-          <td class="px-6 py-3 text-sm text-gray-700">{{ entry.status | replace: '_', ' ' | escape }}</td>
-          <td class="px-6 py-3 text-sm text-gray-500">{{ entry.message | escape }}</td>
+          <td class="px-6 py-3 text-sm text-gray-500 whitespace-nowrap">{{ entry.date }}</td>
+          <td class="px-6 py-3 text-sm text-gray-700">{{ entry.status | replace: '_', ' ' }}</td>
+          <td class="px-6 py-3 text-sm text-gray-500">{{ entry.message }}</td>
         </tr>
       {% else %}
         <tr><td class="px-6 py-10 text-center text-sm text-gray-400">No history.</td></tr>

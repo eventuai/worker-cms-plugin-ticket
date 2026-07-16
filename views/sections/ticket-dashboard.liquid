@@ -1,23 +1,23 @@
 <div class="flex items-center justify-between gap-4 mb-4">
   <div>
-    <a class="inline-block text-xs text-gray-500 mb-1 hover:text-indigo-700" href="{{ backHref | escape }}">← Events</a>
-    <h1 class="text-2xl font-bold text-gray-900">Tickets — {{ eventName | escape }}</h1>
+    <a class="inline-block text-xs text-gray-500 mb-1 hover:text-indigo-700" href="{{ backHref }}">← Events</a>
+    <h1 class="text-2xl font-bold text-gray-900">Tickets — {{ eventName }}</h1>
     <p class="mt-1 text-sm text-gray-500">
       {% if stripeEnabled %}<span class="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">Stripe on</span>{% else %}<span class="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-500">Stripe off</span>{% endif %}
       {% if offlineEnabled %}<span class="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">Offline on</span>{% else %}<span class="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-500">Offline off</span>{% endif %}
     </p>
   </div>
   <div class="inline-flex items-center gap-2">
-    <a class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 hover:bg-gray-100" href="{{ ordersHref | escape }}">Orders</a>
-    <a class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 hover:bg-gray-100" href="{{ linksHref | escape }}">Purchase links</a>
-    {% if canEdit %}<a class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 hover:bg-gray-100" href="{{ settingsHref | escape }}">Settings</a>{% endif %}
+    <a class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 hover:bg-gray-100" href="{{ ordersHref }}">Orders</a>
+    <a class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 hover:bg-gray-100" href="{{ linksHref }}">Purchase links</a>
+    {% if canEdit %}<a class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 hover:bg-gray-100" href="{{ settingsHref }}">Settings</a>{% endif %}
   </div>
 </div>
-{% if flash != blank %}<p class="mb-4 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700">{{ flash | escape }}</p>{% endif %}
+{% if flash != blank %}<p class="mb-4 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700">{{ flash }}</p>{% endif %}
 
 <div class="flex items-center justify-between gap-4 mb-4">
   <h2 class="text-lg font-semibold text-gray-900">Ticket types</h2>
-  {% if canEdit %}<a class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-transparent bg-indigo-600 px-4 text-sm font-semibold text-white hover:bg-indigo-700" href="{{ newTypeHref | escape }}">
+  {% if canEdit %}<a class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-transparent bg-indigo-600 px-4 text-sm font-semibold text-white hover:bg-indigo-700" href="{{ newTypeHref }}">
     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#plus"></use></svg>
     <span class="hidden lg:inline">New ticket type</span>
   </a>{% endif %}
@@ -34,10 +34,10 @@
     <tbody class="divide-y divide-gray-100">
       {% for type in types %}
         <tr>
-          <td class="px-6 py-3 text-sm text-gray-700"><a class="text-indigo-600 font-medium hover:text-indigo-800" href="{{ type.href | escape }}">{{ type.name | escape }}</a></td>
-          <td class="px-6 py-3 text-sm text-gray-700">{{ type.price | escape }}</td>
-          <td class="px-6 py-3 text-sm text-gray-500">{{ type.sold }} / {{ type.quantity | escape }}</td>
-          <td class="px-6 py-3 text-sm text-gray-500">{{ type.saleWindow | escape }}</td>
+          <td class="px-6 py-3 text-sm text-gray-700"><a class="text-indigo-600 font-medium hover:text-indigo-800" href="{{ type.href }}">{{ type.name }}</a></td>
+          <td class="px-6 py-3 text-sm text-gray-700">{{ type.price }}</td>
+          <td class="px-6 py-3 text-sm text-gray-500">{{ type.sold }} / {{ type.quantity }}</td>
+          <td class="px-6 py-3 text-sm text-gray-500">{{ type.saleWindow }}</td>
           <td class="px-6 py-3 text-sm">
             {% if type.soldOut %}<span class="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800">sold out</span>
             {% elsif type.active %}<span class="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">active</span>
@@ -53,7 +53,7 @@
 
 <div class="flex items-center justify-between gap-4 mb-4">
   <h2 class="text-lg font-semibold text-gray-900">Promo codes</h2>
-  {% if canEdit %}<a class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-transparent bg-indigo-600 px-4 text-sm font-semibold text-white hover:bg-indigo-700" href="{{ newPromoHref | escape }}">
+  {% if canEdit %}<a class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-transparent bg-indigo-600 px-4 text-sm font-semibold text-white hover:bg-indigo-700" href="{{ newPromoHref }}">
     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><use href="/assets/icons.svg#plus"></use></svg>
     <span class="hidden lg:inline">New promo code</span>
   </a>{% endif %}
@@ -70,11 +70,11 @@
     <tbody class="divide-y divide-gray-100">
       {% for promo in promos %}
         <tr>
-          <td class="px-6 py-3 text-sm text-gray-700"><a class="text-indigo-600 font-medium hover:text-indigo-800" href="{{ promo.href | escape }}">{{ promo.name | escape }}</a></td>
-          <td class="px-6 py-3 text-sm text-gray-700"><code class="bg-gray-100 px-1 py-0.5 rounded text-xs font-mono">{{ promo.code | escape }}</code></td>
-          <td class="px-6 py-3 text-sm text-gray-700">{{ promo.discount | escape }}</td>
-          <td class="px-6 py-3 text-sm text-gray-500">{{ promo.used | escape }}</td>
-          <td class="px-6 py-3 text-sm text-gray-500">{{ promo.window | escape }}</td>
+          <td class="px-6 py-3 text-sm text-gray-700"><a class="text-indigo-600 font-medium hover:text-indigo-800" href="{{ promo.href }}">{{ promo.name }}</a></td>
+          <td class="px-6 py-3 text-sm text-gray-700"><code class="bg-gray-100 px-1 py-0.5 rounded text-xs font-mono">{{ promo.code }}</code></td>
+          <td class="px-6 py-3 text-sm text-gray-700">{{ promo.discount }}</td>
+          <td class="px-6 py-3 text-sm text-gray-500">{{ promo.used }}</td>
+          <td class="px-6 py-3 text-sm text-gray-500">{{ promo.window }}</td>
         </tr>
       {% else %}
         <tr><td colspan="5" class="px-6 py-10 text-center text-sm text-gray-400">No promo codes.</td></tr>

@@ -1,11 +1,11 @@
 <div class="flex items-center justify-between gap-4 mb-4">
-  <div><a class="inline-block text-xs text-gray-500 mb-1 hover:text-indigo-700" href="{{ backHref | escape }}">← {{ eventName | escape }}</a><h1 class="text-2xl font-bold text-gray-900">Orders</h1>
-  <p class="mt-1 text-sm text-gray-500">Paid: {{ paidTotal | escape }} · Awaiting payment: {{ pendingTotal | escape }}</p></div>
+  <div><a class="inline-block text-xs text-gray-500 mb-1 hover:text-indigo-700" href="{{ backHref }}">← {{ eventName }}</a><h1 class="text-2xl font-bold text-gray-900">Orders</h1>
+  <p class="mt-1 text-sm text-gray-500">Paid: {{ paidTotal }} · Awaiting payment: {{ pendingTotal }}</p></div>
 </div>
-{% if flash != blank %}<p class="mb-4 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700">{{ flash | escape }}</p>{% endif %}
+{% if flash != blank %}<p class="mb-4 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700">{{ flash }}</p>{% endif %}
 <nav class="flex flex-wrap gap-2 mb-4 text-sm">
   {% for item in filters %}
-    <a class="{% if item.active %}font-semibold text-indigo-600{% else %}text-gray-500 hover:text-indigo-700{% endif %}" href="{{ item.href | escape }}">{{ item.label | escape }}</a>
+    <a class="{% if item.active %}font-semibold text-indigo-600{% else %}text-gray-500 hover:text-indigo-700{% endif %}" href="{{ item.href }}">{{ item.label }}</a>
   {% endfor %}
 </nav>
 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
@@ -22,13 +22,13 @@
     <tbody class="divide-y divide-gray-100">
       {% for order in orders %}
         <tr>
-          <td class="px-6 py-3 text-sm"><a class="text-indigo-600 font-medium hover:text-indigo-800 font-mono" href="{{ order.href | escape }}">{{ order.code | escape }}</a></td>
-          <td class="px-6 py-3 text-sm"><span class="inline-block px-2 py-0.5 rounded-full text-xs font-semibold {{ order.statusClass }}">{{ order.status | replace: '_', ' ' | escape }}</span></td>
-          <td class="px-6 py-3 text-sm text-gray-500">{{ order.method | escape }}</td>
-          <td class="px-6 py-3 text-sm text-gray-500">{{ order.email | escape }}</td>
-          <td class="px-6 py-3 text-sm text-gray-700">{{ order.quantity | escape }}</td>
-          <td class="px-6 py-3 text-sm text-gray-700">{{ order.total | escape }}</td>
-          <td class="px-6 py-3 text-sm text-gray-500 whitespace-nowrap">{{ order.created | escape }}</td>
+          <td class="px-6 py-3 text-sm"><a class="text-indigo-600 font-medium hover:text-indigo-800 font-mono" href="{{ order.href }}">{{ order.code }}</a></td>
+          <td class="px-6 py-3 text-sm"><span class="inline-block px-2 py-0.5 rounded-full text-xs font-semibold {{ order.statusClass }}">{{ order.status | replace: '_', ' ' }}</span></td>
+          <td class="px-6 py-3 text-sm text-gray-500">{{ order.method }}</td>
+          <td class="px-6 py-3 text-sm text-gray-500">{{ order.email }}</td>
+          <td class="px-6 py-3 text-sm text-gray-700">{{ order.quantity }}</td>
+          <td class="px-6 py-3 text-sm text-gray-700">{{ order.total }}</td>
+          <td class="px-6 py-3 text-sm text-gray-500 whitespace-nowrap">{{ order.created }}</td>
         </tr>
       {% else %}
         <tr><td colspan="7" class="px-6 py-10 text-center text-sm text-gray-400">No orders{% if filter != '' %} with this status{% endif %} yet.</td></tr>

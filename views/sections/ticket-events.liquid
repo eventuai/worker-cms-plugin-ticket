@@ -7,8 +7,8 @@
     <tbody class="divide-y divide-gray-100">
       {% for event in events %}
         <tr>
-          <td class="px-6 py-3 text-sm text-gray-700"><a class="text-indigo-600 font-medium hover:text-indigo-800" href="{{ event.href | escape }}">{{ event.name | escape }}</a></td>
-          <td class="px-6 py-3 text-sm text-gray-500">{{ event.start | escape }}</td>
+          <td class="px-6 py-3 text-sm text-gray-700"><a class="text-indigo-600 font-medium hover:text-indigo-800" href="{{ event.href }}">{{ event.name }}</a></td>
+          <td class="px-6 py-3 text-sm text-gray-500">{{ event.start }}</td>
         </tr>
       {% else %}
         <tr><td colspan="2" class="px-6 py-10 text-center text-sm text-gray-400">No events yet — create one under Events first.</td></tr>
