@@ -2,7 +2,7 @@
   <div><a class="inline-block text-xs text-gray-500 mb-1 hover:text-indigo-700" href="{{ backHref }}">← {{ eventName }}</a><h1 class="text-2xl font-bold text-gray-900">Purchase links</h1>
   <p class="mt-1 text-sm text-gray-500">Writes a signed <code class="bg-gray-100 px-1 py-0.5 rounded text-xs font-mono">ticket_url</code> onto every guest in a list. Use <code class="bg-gray-100 px-1 py-0.5 rounded text-xs font-mono">{&#123;ticket_url&#125;}</code> in an EDM to send them out.</p></div>
 </div>
-{% if flash != blank %}<p class="mb-4 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700">{{ flash }}</p>{% endif %}
+{% if flash != blank %}<p class="mb-4 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700">{{ flash | t }}</p>{% endif %}
 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6" style="max-width:36rem">
   {% if configured %}
     {% if canEdit %}

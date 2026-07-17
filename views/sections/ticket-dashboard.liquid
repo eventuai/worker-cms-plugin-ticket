@@ -13,7 +13,7 @@
     {% if canEdit %}<a class="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 hover:bg-gray-100" href="{{ settingsHref }}">Settings</a>{% endif %}
   </div>
 </div>
-{% if flash != blank %}<p class="mb-4 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700">{{ flash }}</p>{% endif %}
+{% if flash != blank %}<p class="mb-4 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700">{{ flash | t }}</p>{% endif %}
 
 <div class="flex items-center justify-between gap-4 mb-4">
   <h2 class="text-lg font-semibold text-gray-900">Ticket types</h2>

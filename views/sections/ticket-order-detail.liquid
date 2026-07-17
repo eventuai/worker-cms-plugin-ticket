@@ -27,7 +27,7 @@
   </div>
   {% endif %}
 </div>
-{% if flash != blank %}<p class="mb-4 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700">{{ flash }}</p>{% endif %}
+{% if flash != blank %}<p class="mb-4 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700">{{ flash | t }}</p>{% endif %}
 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-4" style="max-width:36rem">
   <table class="w-full text-left">
     <tbody class="divide-y divide-gray-100">
