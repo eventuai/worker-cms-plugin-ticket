@@ -29,10 +29,9 @@ binding = "CF_VERSION_METADATA"
 # {this worker}/webhook/stripe?t=<tenant ref>:
 #   wrangler kv key put --binding TENANTS "tenant:https://cms1.example.com" \
 #     '{"secret":"<32-byte hex>","signKey":"<32-byte hex>","publicBaseUrl":"https://rsvp1.example.com","vars":{"STRIPE_SECRET_KEY":"sk_...","STRIPE_WEBHOOK_SECRET":"whsec_..."}}'
-# [[kv_namespaces]]
-# binding = "TENANTS"
-# id = "REPLACE_WITH_ID_FROM_npm_run_kv_setup"
-# preview_id = "REPLACE_WITH_ID_FROM_npm_run_kv_setup_preview"
+[[kv_namespaces]]
+binding = "TENANTS"
+id = "d5a3fa432b554d5aaa8b5f43bbec5e6e"
 
 [vars]
 # Base URL of the CMS Worker — where this plugin reaches the Plugin API
