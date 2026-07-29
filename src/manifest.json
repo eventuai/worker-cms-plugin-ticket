@@ -2,6 +2,7 @@
   "id": "ticket",
   "name": "Ticketing",
   "version": "0.1.0",
+  "autoTenant": true,
   "hooks": ["publish", "unpublish", "delete"],
   "nav": [
     { "label": "Tickets", "href": "tickets", "roles": ["admin", "editor", "moderator"] }
