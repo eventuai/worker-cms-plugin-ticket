@@ -2,6 +2,7 @@
   "id": "ticket",
   "name": "Ticketing",
   "version": "0.1.0",
+  "trustLevel": "trusted-ui",
   "autoTenant": true,
   "hooks": ["publish", "unpublish", "delete"],
   "nav": [

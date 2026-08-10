@@ -14,7 +14,15 @@ import { handleLinksAdmin, handleOrdersAdmin, type TicketEnv } from './orders';
 import { forbidden, ticketAdminAccessForRequest } from './permissions';
 import { handleTicketsAdmin, pageId } from './tickets';
 import { adminView } from './templates/views';
-import { requireTenant, serveViewAsset, soleTenant, tenantByRef, tenantClientEnv } from '@lionrockjs/worker-cms-plugin';
+import {
+  handleTenantEnroll,
+  handleTenantRevoke,
+  requireTenant,
+  serveViewAsset,
+  soleTenant,
+  tenantByRef,
+  tenantClientEnv,
+} from '@lionrockjs/worker-cms-plugin';
 // The plugin manifest (content types, nav, permissions) is plain data, served
 // verbatim at /__plugin/manifest.
 import MANIFEST from './manifest.json';
@@ -23,6 +31,13 @@ export default {
   async fetch(request: Request, baseEnv: TicketEnv): Promise<Response> {
     const url = new URL(request.url);
     const path = url.pathname;
+
+    if (path === '/__plugin/tenants/enroll') {
+      return handleTenantEnroll(request, baseEnv, { pluginId: MANIFEST.id });
+    }
+    if (path === '/__plugin/tenants/revoke') {
+      return handleTenantRevoke(request, baseEnv);
+    }
 
     // Secret-authenticated host calls resolve their tenant; handlers then run
     // against a tenant-scoped env, binding every CmsClient to the calling CMS.

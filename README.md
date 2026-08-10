@@ -51,10 +51,15 @@ wrangler secret put STRIPE_WEBHOOK_SECRET  # endpoint: {this worker}/webhook/str
 wrangler deploy
 ```
 
-Then: register the plugin in the CMS admin (Plugins → Manage) with this
-Worker's URL; approve its `readTypes` (event, guest, mail_list) and
+Then: register the plugin in the CMS admin (**Plugins → Register**) with this
+Worker's HTTPS URL; configure its dedicated shared secret and approve its
+`readTypes` (event, guest, mail_list) and
 `writeTypes` (guest); set `PUBLIC_BASE_URL` in wrangler.toml to the worker-rsvp
 origin and `TICKET_PLUGIN_URL` on worker-rsvp to this Worker's origin.
+
+The manifest is `trusted-ui` + `autoTenant`; CMS Connect enrolls the Worker into
+its `TENANTS` KV record. `CMS_URL` + `PLUGIN_SECRET` remain a single-tenant
+fallback for local development.
 
 In the Stripe dashboard add a webhook endpoint for
 `checkout.session.completed`, `checkout.session.expired` and `charge.refunded`.
